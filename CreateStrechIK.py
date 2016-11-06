@@ -30,7 +30,7 @@ def main(*args):
     ik = cmds.listConnections(curveNode,d=True)
     effector = cmds.listConnections(ik, s=True, type='ikEffector')
     jt = cmds.listConnections(ik, s=True, type='joint')[0]
-    jtList = cmds.listRelatives(jt, ad=True)[1:]
+    jtList = cmds.listRelatives(jt, ad=True,type='joint')
     jtList.reverse()
     jtList.insert(0,jt)
 
