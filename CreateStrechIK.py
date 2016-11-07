@@ -16,6 +16,12 @@ import maya.cmds as cmds
 
 def main(*args):
     curve = cmds.textField('inputTextField', q=True, text=True)
+    print cmds.listRelatives(curve,c=True)
+    if cmds.objectType(cmds.listRelatives(curve,c=True)[0]) == 'nurbsCurve':
+        pass
+    else:
+        cmds.warning(u'カーブ以外が選択されています。SplineCurveを選択してください。')
+        return
 
     if cmds.checkBox('ScaleX', q=True, value=True) == True:
         axis = 'X'
@@ -24,7 +30,8 @@ def main(*args):
     elif cmds.checkBox('ScaleZ', q=True, value=True) == True:
         axis = 'Z'
     else:
-        pass
+        cmds.warning(u'scaleが選択されていません。チェックボックスを選択した状態で実行してください。')
+        return
 
     curveNode = cmds.listRelatives(curve,s=True,path=True)
     ik = cmds.listConnections(curveNode,d=True)
