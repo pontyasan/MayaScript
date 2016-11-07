@@ -26,17 +26,18 @@ def main(*args):
     else:
         pass
 
-    curveNode = cmds.listRelatives(curve,s=True)
+    curveNode = cmds.listRelatives(curve,s=True,path=True)
     ik = cmds.listConnections(curveNode,d=True)
     effector = cmds.listConnections(ik, s=True, type='ikEffector')
     jt = cmds.listConnections(ik, s=True, type='joint')[0]
-    jtList = cmds.listRelatives(jt, ad=True,type='joint')
+    jtList = cmds.listRelatives(jt, ad=True,type='joint',path=True)
     jtList.reverse()
     jtList.insert(0,jt)
 
     rc = cmds.createNode('rebuildCurve')
     cmds.connectAttr(curveNode[0] + '.worldSpace[0]',rc + '.inputCurve')
     cmds.setAttr(rc + '.keepRange', 0)
+    cmds.setAttr('rebuildCurve2.spans', 20)
 
 
 
@@ -86,7 +87,7 @@ def main(*args):
         
         length = math.pow( (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1), 0.5 )
         tempLength = tempLength + (length/AllLength)
-        cmds.setAttr(pociList[i + 1] + '.parameter', tempLength)
+        cmds.setAttr(pociList[i+1] + '.parameter', tempLength)
         
     #DistanceBeetWeen
     for i in xrange(len(jtList)-1):
@@ -97,7 +98,7 @@ def main(*args):
         cmds.setAttr(md + '.operation', 2)
         cmds.connectAttr(db + '.distance', md + '.input1X')
         cmds.setAttr(md + '.input2X',cmds.getAttr(db+'.distance'))
-        cmds.connectAttr(md + '.outputX',jtList[i+1] + '.scale%s'%axis)
+        cmds.connectAttr(md + '.outputX',jtList[i] + '.scale%s'%axis)
 
 def getTextField(TF, *args):
     TFtext = cmds.ls(sl=True)[0]
