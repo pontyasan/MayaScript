@@ -34,10 +34,9 @@ def main(*args):
     jtList.reverse()
     jtList.insert(0,jt)
 
-    # rc = cmds.createNode('rebuildCurve')
-    # cmds.connectAttr(curveNode[0] + '.worldSpace[0]',rc + '.inputCurve')
-    # cmds.setAttr(rc + '.keepRange', 0)
-    # curveNode.insert(0,rc)
+    rc = cmds.createNode('rebuildCurve')
+    cmds.connectAttr(curveNode[0] + '.worldSpace[0]',rc + '.inputCurve')
+    cmds.setAttr(rc + '.keepRange', 0)
 
 
 
@@ -58,7 +57,7 @@ def main(*args):
         poci = cmds.createNode('pointOnCurveInfo', n=jt + '_poci' + str(n))
         pociList.append(poci)
         cmds.setAttr(jt + '_poci' + str(n) + '.turnOnPercentage', 1)
-        cmds.connectAttr(curveNode[0] + '.worldSpace[0]',poci + '.inputCurve')
+        cmds.connectAttr(rc + '.outputCurve',poci + '.inputCurve')
         cmds.connectAttr(jt + '_poci' + str(n) + '.result.position', jt + '_loc' + str(n) + '.translate')
 
     #get jt all range
