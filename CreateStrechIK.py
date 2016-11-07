@@ -9,10 +9,10 @@ import sys
 sys.path.insert(0,r'お好みのパス')
 import CreateStrechIK
 reload(CreateStrechIK)
+"""
 import math
 import functools
 import maya.cmds as cmds
-"""
 
 def main(*args):
     curve = cmds.textField('inputTextField', q=True, text=True)
@@ -34,6 +34,13 @@ def main(*args):
     jtList.reverse()
     jtList.insert(0,jt)
 
+    rc = cmds.createNode('rebuildCurve')
+    cmds.connectAttr(curveNode[0] + '.worldSpace[0]',rc + '.inputCurve')
+    cmds.setAttr(rc + '.keepRange', 0)
+    # curveNode.insert(0,rc)
+
+
+    print rc
 
     #Create Locater
     n = 0
