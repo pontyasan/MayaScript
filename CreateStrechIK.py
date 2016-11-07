@@ -40,7 +40,6 @@ def main(*args):
     # curveNode.insert(0,rc)
 
 
-    print rc
 
     #Create Locater
     n = 0
