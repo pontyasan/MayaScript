@@ -37,7 +37,7 @@ def main(*args):
     rc = cmds.createNode('rebuildCurve')
     cmds.connectAttr(curveNode[0] + '.worldSpace[0]',rc + '.inputCurve')
     cmds.setAttr(rc + '.keepRange', 0)
-    cmds.setAttr('rebuildCurve2.spans', 20)
+    cmds.setAttr(rc + '.spans', 20)
 
 
 
