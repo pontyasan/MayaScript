@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 # NaitoTakaya
-# pontyasan★Gmail.com
+
+# 不具合報告はこちらまで
+# pontyasan@Gmail.com
 
 #起動コマンド
 """
@@ -46,27 +48,26 @@ def main(*args):
     cmds.setAttr(rc + '.keepRange', 0)
     cmds.setAttr(rc + '.spans', 20)
 
-
-
     #Create Locater
     n = 0
     pociList = []
-    locList = []
-    locTopNode = cmds.createNode('transform', n=jt + '_locGroup')
+    # locList = []
+    # locTopNode = cmds.createNode('transform', n=jt + '_locGroup')
     for i in xrange(len(jtList)):
         n = n + 1
-        loc = cmds.spaceLocator(n=jt + '_loc' + str(n))
-        locList.append(loc[0])
-        cmds.setAttr(loc[0]+'.translateX', cmds.xform(jt, q=True, ws=True ,t=True)[0])
-        cmds.setAttr(loc[0]+'.translateY', cmds.xform(jt, q=True, ws=True ,t=True)[1])
-        cmds.setAttr(loc[0]+'.translateZ', cmds.xform(jt, q=True, ws=True ,t=True)[2])
-        cmds.parent(loc[0], locTopNode)
+        # loc = cmds.spaceLocator(n=jt + '_loc' + str(n))
+        # locList.append(loc[0])
+        # cmds.setAttr(loc[0]+'.translateX', cmds.xform(jt, q=True, ws=True ,t=True)[0])
+        # cmds.setAttr(loc[0]+'.translateY', cmds.xform(jt, q=True, ws=True ,t=True)[1])
+        # cmds.setAttr(loc[0]+'.translateZ', cmds.xform(jt, q=True, ws=True ,t=True)[2])
+        # cmds.parent(loc[0], locTopNode)
         
         poci = cmds.createNode('pointOnCurveInfo', n=jt + '_poci' + str(n))
         pociList.append(poci)
         cmds.setAttr(jt + '_poci' + str(n) + '.turnOnPercentage', 1)
         cmds.connectAttr(rc + '.outputCurve',poci + '.inputCurve')
-        cmds.connectAttr(jt + '_poci' + str(n) + '.result.position', jt + '_loc' + str(n) + '.translate')
+        print pociList
+        # cmds.connectAttr(jt + '_poci' + str(n) + '.result.position', jt + '_loc' + str(n) + '.translate')
 
     #get jt all range
     AllLength = 0
@@ -96,12 +97,14 @@ def main(*args):
         tempLength = tempLength + (length/AllLength)
         cmds.setAttr(pociList[i+1] + '.parameter', tempLength)
         
+    print pociList[0]
     #DistanceBeetWeen
     for i in xrange(len(jtList)-1):
-        db = cmds.createNode('distanceBetween', name=locList[i] + '_db_' + str(i))
-        cmds.connectAttr(locList[i] + '.translate',db + '.point1')
-        cmds.connectAttr(locList[i+1] + '.translate',db + '.point2')
-        md = cmds.createNode('multiplyDivide', name=locList[i] + '_md' + str(i))
+        print pociList[i]
+        db = cmds.createNode('distanceBetween', name=pociList[i] + '_db_' + str(i))
+        cmds.connectAttr(pociList[i] + '.result.position',db + '.point1')
+        cmds.connectAttr(pociList[i+1] + '.result.position',db + '.point2')
+        md = cmds.createNode('multiplyDivide', name=pociList[i] + '_md' + str(i))
         cmds.setAttr(md + '.operation', 2)
         cmds.connectAttr(db + '.distance', md + '.input1X')
         cmds.setAttr(md + '.input2X',cmds.getAttr(db+'.distance'))
